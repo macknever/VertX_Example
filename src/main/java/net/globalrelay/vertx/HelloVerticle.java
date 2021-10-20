@@ -1,9 +1,13 @@
 package net.globalrelay.vertx;
 
+import java.util.UUID;
+
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.eventbus.Message;
 
 public class HelloVerticle extends AbstractVerticle {
+
+    String verticleId = UUID.randomUUID().toString();
 
     @Override
     public void start() {
@@ -18,6 +22,6 @@ public class HelloVerticle extends AbstractVerticle {
 
     void helloNamedConsumer(Message<String> msg) {
         String name = msg.body().toString();
-        msg.reply(String.format("Hello %s", name));
+        msg.reply(String.format("Hello %s from %s", name, verticleId));
     }
 }

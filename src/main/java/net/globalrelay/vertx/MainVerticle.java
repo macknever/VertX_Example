@@ -1,7 +1,8 @@
 package net.globalrelay.vertx;
 
+import org.jgroups.util.UUID;
+
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.DeploymentOptions;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 
@@ -10,9 +11,7 @@ public class MainVerticle extends AbstractVerticle {
     @Override
     public void start() {
 
-        DeploymentOptions opts = new DeploymentOptions().setWorker(true).setInstances(8);
-
-        vertx.deployVerticle("net.globalrelay.vertx.HelloVerticle", opts);
+        vertx.deployVerticle(new HelloVerticle());
 
         Router router = Router.router(vertx);
 
@@ -20,7 +19,15 @@ public class MainVerticle extends AbstractVerticle {
 
         router.get("/api/v1/hello/:name").handler(this::helloNameHandler);
 
-        vertx.createHttpServer().requestHandler(router).listen(8080);
+        int httpPort;
+
+        try {
+            httpPort = Integer.parseInt(System.getProperty("http.port", "8080"));
+        } catch (NumberFormatException nfe) {
+            httpPort = 8080;
+        }
+
+        vertx.createHttpServer().requestHandler(router).listen(httpPort);
 
     }
 
