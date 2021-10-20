@@ -1,6 +1,7 @@
 package net.globalrelay.vertx;
 
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.DeploymentOptions;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 
@@ -9,7 +10,9 @@ public class MainVerticle extends AbstractVerticle {
     @Override
     public void start() {
 
-        vertx.deployVerticle(new HelloVerticle());
+        DeploymentOptions opts = new DeploymentOptions().setWorker(true).setInstances(8);
+
+        vertx.deployVerticle("net.globalrelay.vertx.HelloVerticle", opts);
 
         Router router = Router.router(vertx);
 
