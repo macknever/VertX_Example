@@ -13,4 +13,11 @@ public class Pong {
     public Integer getId() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return "Pong{" +
+                "id=" + id +
+                '}';
+    }
 }

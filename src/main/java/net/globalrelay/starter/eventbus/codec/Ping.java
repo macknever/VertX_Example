@@ -20,4 +20,12 @@ public class Ping {
     public boolean isEnabled() {
         return enabled;
     }
+
+    @Override
+    public String toString() {
+        return "Ping{" +
+                "message='" + message + '\'' +
+                ", enabled=" + enabled +
+                '}';
+    }
 }
