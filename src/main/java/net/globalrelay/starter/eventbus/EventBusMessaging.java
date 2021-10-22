@@ -4,6 +4,8 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,11 +29,11 @@ public class EventBusMessaging extends AbstractVerticle {
         public void start(Promise<Void> startPromise) throws Exception {
 
 
-            final String message = "Hello there!";
+            final JsonObject message = new JsonObject().put("id", 1).put("name", "Lawrence");
 
             LOG.debug("Sending: {}", message);
             EventBus eventBus = vertx.eventBus();
-            eventBus.<String>request(ADDRESS, message, reply -> {
+            eventBus.<JsonArray>request(ADDRESS, message, reply -> {
                 LOG.debug("response:{}", reply.result().body());
             });
 
@@ -44,11 +46,11 @@ public class EventBusMessaging extends AbstractVerticle {
 
         @Override
         public void start(Promise<Void> startPromise) throws Exception {
-            final String MESSAGE = String.format("I am %s, I received your message, THX", getClass().getName());
+            // final String MESSAGE = String.format("I am %s, I received your message, THX", getClass().getName());
 
-            vertx.eventBus().<String>consumer(RequestVerticle.ADDRESS, message -> {
+            vertx.eventBus().<JsonObject>consumer(RequestVerticle.ADDRESS, message -> {
                 LOG.debug("Received message: {}", message.body());
-                message.reply(MESSAGE);
+                message.reply(new JsonArray().add("one").add("two").add("three"));
             });
         }
     }
